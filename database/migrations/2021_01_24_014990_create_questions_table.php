@@ -20,7 +20,8 @@ class CreateQuestionsTable extends Migration
             $table->enum('status',['active', 'inactive'])->default('active');
             $table->foreignUuid('user_id')->nullable();
             $table->foreignUuid('question_category_id');
-            $table->text('resource')->nullable();
+            $table->text('resource_link')->nullable();
+            $table->text('hint')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('question_category_id')->references('id')->on('question_categories')->onDelete('cascade');
             $table->timestamps();

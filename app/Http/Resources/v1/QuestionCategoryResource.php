@@ -17,7 +17,7 @@ class QuestionCategoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->question,
+            'name' => $this->name,
             'description' => $this->description,
             'status' => $this->status,
         ];

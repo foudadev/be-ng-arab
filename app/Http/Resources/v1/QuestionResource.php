@@ -18,10 +18,10 @@ class QuestionResource extends JsonResource
         return [
             'id' => $this->id,
             'question' => $this->question,
-            'category' => $this->question_category->name,
+            'category' => $this->category?$this->category->name:null,
             'level' => $this->level,
             'status' => $this->status,
-            'resource' => $this->resource,
+            'resource' => $this->resource_link,
             'answers'=>AnswerResource::collection($this->answers)
         ];
     }

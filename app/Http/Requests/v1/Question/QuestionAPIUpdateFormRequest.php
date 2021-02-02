@@ -29,8 +29,10 @@ class QuestionAPIUpdateFormRequest extends FormRequest
             'question' => ['required', 'string', 'max:255'],
             'level' => ['required', 'string', 'in:junior,senior,expert'],
             'status' => ['nullable', 'string', 'in:active,inactive'],
-            'resource' => ['nullable', 'string'],
-            'question_category_id' => ['required', 'string', 'exist:question_categories,id'],
+            'resource_link' => ['nullable', 'string'],
+            'hint' => ['nullable', 'string'],
+            'answers' => ['nullable'],
+            'question_category_id' => ['required', 'string'],
         ];
     }
 }

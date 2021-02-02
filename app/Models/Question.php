@@ -21,7 +21,8 @@ class Question extends Model
         'question_category_id',
         'user_id',
         'level',
-        'resource',
+        'resource_link',
+        'hint',
         'status',
     ];
 
@@ -31,6 +32,15 @@ class Question extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * Get user added the question.
+     */
+    public function category()
+    {
+        return $this->belongsTo(QuestionCategory::class,'question_category_id','id');
     }
 
     /**

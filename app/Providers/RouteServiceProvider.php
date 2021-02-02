@@ -36,9 +36,16 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
+        Route::bind('school', function ($value) {
+            if (! Uuid::isValid($value)) {
+                throw (new ModelNotFoundException)->setModel(School::class, $value);
+            }
 
+            return School::findOrFail($value);
+        });
         $this->routes(function () {
-            Route::prefix('{locale}/api')
+            Route::prefix('api')
+                ->where( ['locale' => '[a-zA-Z]{2}'])
                 ->middleware(['api','locale'])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));

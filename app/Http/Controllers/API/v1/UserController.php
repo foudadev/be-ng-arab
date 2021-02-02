@@ -7,17 +7,19 @@ use App\Http\Requests\v1\User\UserAPIStoreFormRequest;
 use App\Http\Requests\v1\User\UserAPIUpdateFormRequest;
 use App\Http\Resources\v1\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
         $users = User::all();
-        return response()->json(['users' => UserResource::collection($users), 'status' => __("successful")]);
+        return response()->json(['users' => UserResource::collection($users), 'status' => __("main.successful")]);
     }
 
 
@@ -27,26 +29,27 @@ class UserController extends Controller
      * @bodyParam  name string required
      * @bodyParam  email string required
      * @bodyParam  password string required
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(UserAPIStoreFormRequest $request)
     {
         $data = $request->validated();
+        $data['password']=Hash::make($data['password']);
         $user = User::create($data);
         if ($user)
-            return response()->json(['user' => new UserResource($user), 'status' => __("successful")], 201);
+            return response()->json(['user' => new UserResource($user), 'status' => __("main.successful")], 201);
         else
-            return response()->json(['message' => __("Error has occurred")], 422);
+            return response()->json(['message' => __("main.Error has occurred")], 422);
     }
 
     /**
      * Display the specified resource.
      * @param User $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(User $user)
     {
-        return response()->json(['user' => new UserResource($user), 'status' => __("successful")]);
+        return response()->json(['user' => new UserResource($user), 'status' => __("main.successful")]);
     }
 
 
@@ -58,30 +61,32 @@ class UserController extends Controller
      * @bodyParam  name string required
      * @bodyParam  email string required
      * @bodyParam  password string required
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(UserAPIUpdateFormRequest $request, User $user)
+    public function update(UserAPIUpdateFormRequest $request,User $user)
     {
         $data = $request->validated();
-        $user = $user->update($data);
-        if ($user)
-            return response()->json(['user' => new UserResource($user), 'status' => __("successful")]);
+        if(array_key_exists('password',$data))
+        $data['password']= Hash::make($data['password']);
+        $did_update = $user->update($data);
+        if ($did_update)
+            return response()->json(['user' => new UserResource($user), 'status' => __("main.successful")]);
         else
-            return response()->json(['message' => __("Error has occurred")], 422);
+            return response()->json(['message' => __("main.Error has occurred")], 422);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param User $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(User $user)
     {
         $did_delete=$user->delete();
         if($did_delete)
-            return response()->json(['status' => __("deleted successfully")]);
+            return response()->json(['status' => __("main.deleted successfully")]);
         else
-            return response()->json(['message' => __("Error has occurred")], 422);
+            return response()->json(['message' => __("main.Error has occurred")], 422);
     }
 }

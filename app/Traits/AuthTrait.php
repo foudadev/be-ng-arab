@@ -15,9 +15,10 @@ trait AuthTrait{
      */
     protected function initiateSignup(array $data): JsonResponse
     {
+        if(array_key_exists('password',$data))  //for social login
         $data['password']=Hash::make($data['password']);
+
         $user=User::create($data);
-//        $user = $this->registerUserService->register(Arr::except($data, ['type', 'firebase_token', 'platform']));
 //        $this->resendEmailVerification($user);
         return $this->createToken($user, __('user.Signed up successfully'), 201);
     }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\v1\User;
+namespace App\Http\Requests\v1\Answer;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
-class UserAPIUpdateFormRequest extends UserAPIStoreFormRequest
+class AnswerAPIUpdateFormRequest extends FormRequest
 {
     //todo: implement role
     /**
@@ -26,10 +26,8 @@ class UserAPIUpdateFormRequest extends UserAPIStoreFormRequest
     public function rules()
     {
         return [
-            'name' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'email', Rule::unique('users')->ignore($this->user)],
-            'password' => ['nullable', 'string', 'max:255'],
-            'photo'=>['nullable','string']
+            'answer' => ['required', 'string', 'max:255'],
+            'accepted' => ['required', 'integer', 'in:0,1'],
         ];
     }
 }

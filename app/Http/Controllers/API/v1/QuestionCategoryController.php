@@ -10,6 +10,7 @@ use App\Models\Question;
 use App\Models\QuestionCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuestionCategoryController extends Controller
 {
@@ -20,8 +21,8 @@ class QuestionCategoryController extends Controller
      */
     public function index()
     {
-        $users = Question::where('status','active')->get();
-        return response()->json(['categories' => QuestionCategoryResource::collection($users), 'status' => __("successful")]);
+        $users = QuestionCategory::where('status','active')->get();
+        return response()->json(['categories' => QuestionCategoryResource::collection($users), 'status' => __("main.successful")]);
     }
 
     /**
@@ -38,54 +39,54 @@ class QuestionCategoryController extends Controller
         $data = $request->validated();
         $category = QuestionCategory::create($data);
         if ($category)
-            return response()->json(['category' => new QuestionCategoryResource($category), 'status' => __("successful")], 201);
+            return response()->json(['category' => new QuestionCategoryResource($category), 'status' => __("main.successful")], 201);
         else
-            return response()->json(['message' => __("Error has occurred")], 422);
+            return response()->json(['message' => __("main.Error has occurred")], 422);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param QuestionCategory $questionCategory
+     * @param QuestionCategory $category
      * @return JsonResponse
      */
-    public function show(QuestionCategory $questionCategory)
+    public function show(QuestionCategory $category)
     {
-        return response()->json(['category' => new QuestionCategoryResource($questionCategory), 'status' => __("successful")]);
+        return response()->json(['category' => new QuestionCategoryResource($category), 'status' => __("main.successful")]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param QuestionCategoryAPIUpdateFormRequest $request
-     * @param QuestionCategory $questionCategory
+     * @param QuestionCategory $category
      * @return JsonResponse
      * @bodyParam  name string required
      * @bodyParam  description string nullable
      * @bodyParam  status enum in(active,inactive) nullable
      */
-    public function update(QuestionCategoryAPIUpdateFormRequest $request, QuestionCategory $questionCategory)
+    public function update(QuestionCategoryAPIUpdateFormRequest $request, QuestionCategory $category)
     {
         $data = $request->validated();
-        $updated_category = $questionCategory->update($data);
-        if ($updated_category)
-            return response()->json(['category' => new QuestionCategoryResource($updated_category), 'status' => __("successful")]);
+        $did_update = $category->update($data);
+        if ($did_update)
+            return response()->json(['category' => new QuestionCategoryResource($category), 'status' => __("main.successful")]);
         else
-            return response()->json(['message' => __("Error has occurred")], 422);
+            return response()->json(['message' => __("main.Error has occurred")], 422);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param QuestionCategory $questionCategory
+     * @param QuestionCategory $category
      * @return JsonResponse
      */
-    public function destroy(QuestionCategory $questionCategory)
+    public function destroy(QuestionCategory $category)
     {
-        $did_delete=$questionCategory->delete();
+        $did_delete=$category->delete();
         if($did_delete)
-            return response()->json(['status' => __("deleted successfully")]);
+            return response()->json(['status' => __("main.deleted successfully")]);
         else
-            return response()->json(['message' => __("Error has occurred")], 422);
+            return response()->json(['message' => __("main.Error has occurred")], 422);
     }
 }
