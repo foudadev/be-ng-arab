@@ -26,7 +26,7 @@ class UserAPIRegisterFormRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'string', 'confirmed'],
         ];
     }

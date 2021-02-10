@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('question');
-            $table->enum('level',['beginner','junior','senior', 'expert'])->default('beginner');
+            $table->enum('level',['junior','mid-senior','senior', 'expert'])->default('junior');
             $table->enum('status',['active', 'inactive'])->default('active');
             $table->foreignUuid('user_id')->nullable();
             $table->foreignUuid('question_category_id');
