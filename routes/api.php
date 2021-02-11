@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test',function (Request $request){
+    return response()->json('hello world',200);
+});
+
+
 Route::group([
     'prefix' => 'v1/auth',
     'namespace' => 'Auth',
@@ -28,6 +33,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::resource('/users', \App\Http\Controllers\API\v1\UserController::class)->except(['create', 'edit']);
     Route::resource('/questions', \App\Http\Controllers\API\v1\QuestionController::class)->except(['create', 'edit']);
     Route::resource('/categories', \App\Http\Controllers\API\v1\QuestionCategoryController::class)->except(['create', 'edit']);
-    Route::resource('/answers', \App\Http\Controllers\API\v1\AnswerController::class)->except(['index', 'create','show', 'edit']);
+    Route::resource('/answers', \App\Http\Controllers\API\v1\RoleController::class)->except(['index', 'create','show', 'edit']);
+    Route::resource('/roles',\App\Http\Controllers\API\v1\RoleController::class);
+
 });
 
