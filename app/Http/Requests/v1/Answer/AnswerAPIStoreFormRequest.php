@@ -28,7 +28,7 @@ class AnswerAPIStoreFormRequest extends FormRequest
         return [
             'answer' => ['required', 'string', 'max:255'],
             'accepted' => ['required', 'integer', 'in:0,1'],
-            'question_id' => ['required', 'string', 'exist:questions,id'],
+            'question_id' => ['required', 'string'],
         ];
     }
 }

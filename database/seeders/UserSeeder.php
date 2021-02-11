@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             [
                 'id'       => (string)Str::uuid(),
                 'name'     => 'Admin',
-                'password' => bcrypt('123456'),
+                'password' => bcrypt('password'),
             ]
         );
     }
