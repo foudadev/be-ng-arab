@@ -74,6 +74,7 @@ return [
             'username' => $DATABASE_URL["user"],
             'password' => $DATABASE_URL["pass"],
             'charset' => 'utf8',
+            'collation' => 'utf8_general_ci',
             'prefix' => '',
             'schema' => 'public',
             'sslmode' => 'require',
