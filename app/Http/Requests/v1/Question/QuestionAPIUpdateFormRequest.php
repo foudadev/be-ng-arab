@@ -26,7 +26,7 @@ class QuestionAPIUpdateFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'question' => ['required', 'string', 'max:255'],
+            'question' => ['required', 'string'],
             'level' => ['required', 'string', 'in:junior,senior,expert'],
             'status' => ['nullable', 'string', 'in:active,inactive'],
             'resource_link' => ['nullable', 'string'],
