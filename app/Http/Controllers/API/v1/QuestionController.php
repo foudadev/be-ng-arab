@@ -37,7 +37,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $users = Question::where('status', 'active')->get();
+        $users = Question::all();
         return response()->json(['questions' => QuestionResource::collection($users), 'status' => __("successful")]);
     }
 

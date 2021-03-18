@@ -21,6 +21,7 @@ class QuestionResource extends JsonResource
             'category' => $this->category?$this->category->name:null,
             'level' => $this->level,
             'status' => $this->status,
+            'hint' => $this->hint,
             'resource' => $this->resource_link,
             'answers'=>AnswerResource::collection($this->answers)
         ];
