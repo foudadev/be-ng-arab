@@ -27,7 +27,7 @@ class QuestionAPIUpdateFormRequest extends FormRequest
     {
         return [
             'question' => ['required', 'string'],
-            'level' => ['required', 'string', 'in:junior,senior,expert'],
+            'level' => ['required', 'string', 'in:junior,mid-senior,senior,expert'],
             'status' => ['nullable', 'string', 'in:active,inactive'],
             'resource_link' => ['nullable', 'string'],
             'hint' => ['nullable', 'string'],
