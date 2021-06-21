@@ -3,104 +3,50 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\Exam\ExamAPICreateFormRequest;
-//use App\Http\Resources\v1\QuestionResource;
-//use App\Http\Services\AnswerService;
+use App\Http\Requests\v1\Exam\ExamAPIStoreFormRequest;
 use App\Models\Exam;
+//use App\Models\Question;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Services\ExamService;
+use App\Http\Resources\v1\QuestionResource;
+use App\Http\Resources\v1\ExamResource;
 
 class ExamController extends Controller {
-    /**
-     * @var AnswerService
-     */
-//    protected AnswerService $answerService;
-//
-//
-//    /**
-//     * QuestionController constructor.
-//     * @param AnswerService $answerService
-//     */
-//    public function __construct(AnswerService $answerService)
-//    {
-//        $this->answerService = $answerService;
-//    }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
+     * @var ExamService
      */
-//    public function index()
-//    {
-//        $users = Question::all();
-//        return response()->json(['questions' => QuestionResource::collection($users), 'status' => __("successful")]);
-//    }
+    protected ExamService $examService;
 
-    public function create(ExamAPICreateFormRequest $request) {
-        $data = $request->validated();
-        $data['user_id'] = Auth::id();
-        $exam = Exam::create($data);
+    /**
+     * QuestionController constructor.
+     * @param ExamService $examService
+     */
+    public function __construct(ExamService $examService) {
+        $this->examService = $examService;
+    }
 
-        return response()->json(['exam' => $exam, 'status' => __("main.successful")]);
-//        return response()->json(['exam' => new QuestionResource($question), 'status' => __("main.successful")]);
+    public function create() {
+        
     }
 
     /**
      * Store a newly created resource in storage.
-     * @param QuestionAPIStoreFormRequest $request
-     * @bodyParam  question string required
+     * @param ExamAPIStoreFormRequest $request
      * @bodyParam  level enum in(junior,senior,expert) required
-     * @bodyParam  status enum in(active,inactive) nullable
      * @bodyParam  question_category_id string required
-     * @bodyParam  answers array nullable
      * @return JsonResponse
      */
-    public function store(QuestionAPIStoreFormRequest $request) {
+    public function store(ExamAPIStoreFormRequest $request) {
         $data = $request->validated();
         $data['user_id'] = Auth::id();
-        $question = Question::create(Arr::except($data, 'answers'));
-        if ($question) {
-            if (array_key_exists("answers", $data))
-                $this->answerService->createAndAssociate($data['answers'], $question);
-            return response()->json(['question' => new QuestionResource($question), 'status' => __("main.successful")], 201);
-        } else
-            return response()->json(['message' => __("main.Error has occurred")], 422);
-    }
+        $conditions = ['status' => 'active', 'question_category_id' => $data['question_category_id']];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Question $question
-     * @return JsonResponse
-     */
-    public function show(Question $question) {
-        return response()->json(['question' => new QuestionResource($question), 'status' => __("main.successful")]);
-    }
+        $exam = Exam::create($data);
+        $questions = $this->examService->createQuestions($data['level'], $conditions);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param QuestionAPIUpdateFormRequest $request
-     * @param Question $question
-     * @bodyParam  question string required
-     * @bodyParam  level enum in(junior,senior,expert) required
-     * @bodyParam  status enum in(active,inactive) nullable
-     * @bodyParam  resource string nullable
-     * @bodyParam  question_category_id string required
-     * @bodyParam  answers array nullable
-     * @return JsonResponse
-     */
-    public function update(QuestionAPIUpdateFormRequest $request, Question $question) {
-        $data = $request->validated();
-        $updated_question = $question->update(Arr::except($data, 'answers'));
-        if ($updated_question) {
-            if (array_key_exists("answers", $data))
-                $this->answerService->reinsertAllAnswers($data['answers'], $question);
-            return response()->json(['question' => new QuestionResource($question), 'status' => __("main.successful")]);
-        } else
-            return response()->json(['message' => __("Error has occurred")], 422);
+        return response()->json(['exam' => new ExamResource($exam->refresh()), 'questions' => QuestionResource::collection($questions)]);
     }
 
 }

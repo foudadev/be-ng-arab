@@ -30,7 +30,7 @@ Route::group([
 
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
-    Route::resource('/exams', \App\Http\Controllers\API\v1\UserController::class)->except(['index','edit','store', 'destroy']);
+    Route::resource('/exams', \App\Http\Controllers\API\v1\ExamController::class)->except(['index','edit','create', 'destroy']);
     Route::resource('/users', \App\Http\Controllers\API\v1\UserController::class)->except(['create', 'edit']);
     Route::resource('/questions', \App\Http\Controllers\API\v1\QuestionController::class)->except(['create', 'edit']);
     Route::resource('/categories', \App\Http\Controllers\API\v1\QuestionCategoryController::class)->except(['create', 'edit']);

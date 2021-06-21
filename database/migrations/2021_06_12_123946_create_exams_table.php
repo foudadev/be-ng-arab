@@ -20,10 +20,10 @@ class CreateExamsTable extends Migration {
             $table->foreign('question_category_id')->references('id')->on('question_categories')->onDelete('cascade');
             $table->enum('level', ['junior', 'mid-senior', 'senior', 'expert'])->default('junior');
             $table->enum('status', ['in_progress', 'done'])->default('in_progress');
-            $table->time('answering_time')->nullable();
-            $table->double('degree')->nullable();
-            $table->integer('used_hint_count')->nullable();
-            $table->integer('skipped_count')->nullable();
+            $table->double('answering_time')->default(0);
+            $table->double('degree')->default(0);
+            $table->integer('used_hint_count')->default(0);
+            $table->integer('skipped_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
