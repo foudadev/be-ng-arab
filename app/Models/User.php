@@ -12,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, UuidTrait, Notifiable, HasRoles ,HasApiTokens, SoftDeletes;
+    use HasFactory, UuidTrait, Notifiable, HasRoles, HasApiTokens, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -45,14 +45,21 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'created_at'=>'datetime',
-        'updated_at'=>'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
      * Get the User image.
      */
-    public function getImageAttribute(){
+    public function getImageAttribute()
+    {
         return asset($this->photo);
+    }
+
+
+    public function exams()
+    {
+        return $this->hasMany(Exam::class);
     }
 }

@@ -28,7 +28,7 @@ class ExamController extends Controller {
     }
 
     public function create() {
-        
+
     }
 
     /**
@@ -42,11 +42,16 @@ class ExamController extends Controller {
         $data = $request->validated();
         $data['user_id'] = Auth::id();
         $conditions = ['status' => 'active', 'question_category_id' => $data['question_category_id']];
+        $availability=$this->examService->canEnterExam($data['level'],$data['question_category_id']);
+        if($availability['status']){
+            $exam = Exam::create($data);
+            $questions = $this->examService->createQuestions($data['level'], $conditions);
 
-        $exam = Exam::create($data);
-        $questions = $this->examService->createQuestions($data['level'], $conditions);
+            return response()->json(['exam' => new ExamResource($exam->refresh()), 'questions' => QuestionResource::collection($questions)]);
+        }else{
+            return  response()->json(["status"=>"failed"]+$availability,422);
+        }
 
-        return response()->json(['exam' => new ExamResource($exam->refresh()), 'questions' => QuestionResource::collection($questions)]);
     }
 
 }

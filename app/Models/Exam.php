@@ -29,6 +29,12 @@ class Exam extends Model {
         'skipped_count',
     ];
 
+    protected $dates=[
+        'created_at'.
+        'updated_at',
+        'deleted_at'
+    ];
+
     /**
      * Get user added the question.
      */
